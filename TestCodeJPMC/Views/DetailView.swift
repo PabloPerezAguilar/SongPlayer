@@ -11,7 +11,7 @@ import AVKit
 struct DetailView: View {
     
     let song: Song
-    @StateObject var viewModel = SongViewModelImp()
+    @StateObject var viewModel = SongViewModel()
     
     var body: some View {
         VStack {
@@ -23,11 +23,17 @@ struct DetailView: View {
                 
                 
                 Button {
-                    viewModel.buttonPressed()
+                    viewModel.playPauseButtonPressed()
                 } label: {
                     Image(systemName: viewModel.isPlaying ? "pause.fill" : "play.fill")
                         .font(.largeTitle)
-                            .foregroundColor(.white)
+                        .foregroundColor(.pink)
+                        .padding()
+                        .background {
+                            Circle()
+                                .fill(.white)
+                                .shadow(radius: 10)
+                        }
                 }
             }
             
