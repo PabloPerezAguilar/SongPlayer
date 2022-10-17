@@ -16,13 +16,14 @@ protocol SongViewModel {
     func buttonPressed()
 }
 
-class SongViewModelImp: ObservableObject, SongViewModel {
+class SongViewModelImp: NSObject, ObservableObject, SongViewModel {
     var player: AVAudioPlayer!
     @Published private(set) var isPlaying: Bool = false
     
     func initPlayer(_ audio: String) {
         let sound = Bundle.main.path(forResource: audio, ofType: "mp3")
         self.player = try! AVAudioPlayer(contentsOf: URL(fileURLWithPath: sound!))
+        self.player.delegate = self
     }
     
     func play() {
@@ -43,6 +44,12 @@ class SongViewModelImp: ObservableObject, SongViewModel {
         }
     }
     
-    
-    
 }
+
+extension SongViewModelImp: AVAudioPlayerDelegate {
+    func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
+        guard flag else { return }
+        self.isPlaying = false
+    }
+}
+

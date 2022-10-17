@@ -34,8 +34,12 @@ struct DetailView: View {
             Text(song.name)
                 .font(.title)
 
-        }.onAppear {
+        }
+        .onAppear {
             viewModel.initPlayer(song.audio)
+        }
+        .onDisappear {
+            viewModel.pause()
         }
     }
     
