@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ContentView: View {
     
-    @StateObject var viewModel = SongListViewImp()
+    @StateObject var viewModel = SongListViewModel()
     let cols: [GridItem] = [
         GridItem(.flexible(), spacing: 6),
         GridItem(.flexible(), spacing: 6)
@@ -36,6 +36,7 @@ struct ContentView: View {
                     }
                 }
             }
+            .navigationTitle("Songs list")
         }.onAppear(perform: viewModel.getSongs)
        
     }
