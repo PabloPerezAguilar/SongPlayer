@@ -7,11 +7,8 @@
 
 import Foundation
 
-protocol SongListViewModel {
-    func getSongs()
-}
 
-class SongListViewImp: ObservableObject, SongListViewModel {
+class SongListViewModel: ObservableObject {
     @Published private(set) var songs: [Song] = []
     
     func getSongs(){

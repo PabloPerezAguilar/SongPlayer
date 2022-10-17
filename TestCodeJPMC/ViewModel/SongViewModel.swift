@@ -8,22 +8,20 @@
 import Foundation
 import AVKit
 
-
-protocol SongViewModel {
-    func initPlayer(_ audio: String)
-    func play()
-    func pause()
-    func buttonPressed()
-}
-
-class SongViewModelImp: NSObject, ObservableObject, SongViewModel {
+class SongViewModel: NSObject, ObservableObject {
     var player: AVAudioPlayer!
     @Published private(set) var isPlaying: Bool = false
     
     func initPlayer(_ audio: String) {
-        let sound = Bundle.main.path(forResource: audio, ofType: "mp3")
-        self.player = try! AVAudioPlayer(contentsOf: URL(fileURLWithPath: sound!))
-        self.player.delegate = self
+        guard let sound = Bundle.main.path(forResource: audio, ofType: "mp3") else { return  }
+       
+        do {
+            self.player = try AVAudioPlayer(contentsOf:  URL(fileURLWithPath: sound))
+            self.player.delegate = self
+        }catch {
+            print(error)
+        }
+        
     }
     
     func play() {
@@ -34,7 +32,7 @@ class SongViewModelImp: NSObject, ObservableObject, SongViewModel {
         player.stop()
     }
     
-    func buttonPressed() {
+    func playPauseButtonPressed() {
         if let player = player, player.isPlaying {
             isPlaying = false
             pause()
@@ -46,7 +44,7 @@ class SongViewModelImp: NSObject, ObservableObject, SongViewModel {
     
 }
 
-extension SongViewModelImp: AVAudioPlayerDelegate {
+extension SongViewModel: AVAudioPlayerDelegate {
     func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
         guard flag else { return }
         self.isPlaying = false
